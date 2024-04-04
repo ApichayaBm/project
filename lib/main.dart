@@ -1,7 +1,8 @@
-import 'dart:convert';
-//import 'package:dio/dio.dart';
+// ignore: unused_import
+import 'dart:convert';                                                                     
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http; // Import the http package
+//import 'package:http/http.dart' as http; // Import the http package
 
 void main() {
   runApp(const MyApp());
@@ -123,6 +124,8 @@ class _OrderFoodPageState extends State<OrderFoodPage> {
 
   final TextEditingController _otherFoodController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
+  
+  //var dio;
 
   @override
   void initState() {
@@ -133,23 +136,26 @@ class _OrderFoodPageState extends State<OrderFoodPage> {
   void _populateFoods() {
     if (widget.foodCategory == 'เมนูอาหาร') {
       _foods = [
-        'ผัดกะเพรา',
-        'ผัดพริกแกง',
         'หมูทอดกระเทียม',
-        'ข้าวผัด',
-        'ผัดพริกสด',
-        'ต้มจืด',
-        'ต้มยำ',
-        'แกงป่า',
-        'ต้มแซ่บ',
-        'แกงส้ม',
-        'แกงเลียง',
-        'ราดหน้า',
-        'ผัดซีอิ๊ว',
-        'ไข่ข้น',
-        'ไก่ทอด',
-        'สุกี้'
+        'ข้าวผัดกะเพราหมู',
+        'ข้าวมันไก่',
+        'ผัดผักบุ้ง',
+        'แกงจืดเต้าหู้หมูสับ',
+        'ผัดไท',
+        'ต้มยำกุ้ง',
+        'ข้าวต้มปลา',
+        'ยำปลาดุกฟู',
+        'ทอดมันปลากราย',
+        'ข้าวผัดหมู',
+        'น้ำพริกอ่อง',
+        'ขนมจีนน้ำยา',
+        'ข้าวขาหมู'
       ];
+    // void _populateFoods() {
+    // if (widget.foodCategory == 'เมนูของหวาน') {
+    //   _foods = [
+    //     'ปลากริม', 'สลิ่ม' , 'กล้วยบวชชี' , 'แกงบวชข้าวโพด' , 'เฉาก๊วย', 'ลอดช่อง'
+    //   ];
     } else if (widget.foodCategory == 'เมนูของหวาน') {
       _foods = ['ปลากริม', 'สลิ่ม' , 'กล้วยบวชชี' , 'แกงบวชข้าวโพด' , 'เฉาก๊วย', 'ลอดช่อง'];
     } else if (widget.foodCategory == 'น้ำดื่ม') {
@@ -169,25 +175,43 @@ class _OrderFoodPageState extends State<OrderFoodPage> {
   //   });
   // }
 
-  Future<void> _populateFood() async { // Make the method asynchronous
-    try {
-      var response = await http.get(Uri.parse('http://localhost:3000/foods')); // Make the HTTP GET request
-      if (response.statusCode == 200) {
-        List<dynamic> jsonData = jsonDecode(response.body); // Decode the JSON response
-        List<String> foods = [];
-        for (var item in jsonData) {
-          foods.add(item['name']);
-        }
-        setState(() {
-          _foods = foods;
-        });
-      } else {
-        throw Exception('Failed to load foods');
-      }
-    } catch (error) {
-      print('Error fetching foods: $error');
+  // Future<void> _populateFood() async { // Make the method asynchronous
+  //   try {
+  //     //var response = await dio.get('http://localhost:3000/foods');
+  //     http.Response response = await http.get(Uri.parse('http://localhost:3000/foods')); // Make the HTTP GET request
+  //     if (response.statusCode == 200) {
+  //       List<dynamic> jsonData = jsonDecode(response.body); // Decode the JSON response
+  //       List<String> foods = [];
+  //       for (var item in jsonData) {
+  //         foods.add(item['name']);
+  //       }
+  //       setState(() {
+  //         _foods = foods;
+  //       });
+  //     } else {
+  //       throw Exception('Failed to load foods');
+  //     }
+  //   } catch (error) {
+  //     print('Error fetching foods: $error');
+  //   }
+  // }
+  Future<void> _populateFood() async {
+  try {
+    var dio = Dio(BaseOptions(responseType: ResponseType.plain));
+    var response = await dio.get('http://localhost:3000/foods');
+    if (response.statusCode == 200) {
+      List<String> foods = response.data.split('\n'); // Assuming each food name is on a new line
+      setState(() {
+        _foods = foods;
+      });
+    } else {
+      throw Exception('Failed to load foods');
     }
+  } catch (error) {
+    print('Error fetching foods: $error');
   }
+}
+
 
   @override
   void dispose() {
