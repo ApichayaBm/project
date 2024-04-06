@@ -1,8 +1,7 @@
-// ignore: unused_import
 import 'dart:convert';                                                                     
-import 'package:dio/dio.dart';
+//import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-//import 'package:http/http.dart' as http; // Import the http package
+import 'package:http/http.dart' as http; // Import the http package
 
 void main() {
   runApp(const MyApp());
@@ -130,8 +129,8 @@ class _OrderFoodPageState extends State<OrderFoodPage> {
   @override
   void initState() {
     super.initState();
-    _populateFoods();
-    _populateFood();
+    _populateFoods(); // เรียกเมธอด _populateFoods() เพื่อกำหนดรายการอาหารเริ่มต้น
+    _populateFood(); // เรียกเมธอด _populateFood() เพื่อโหลดข้อมูลอาหารจาก API
   }
   void _populateFoods() {
     if (widget.foodCategory == 'เมนูอาหาร') {
@@ -162,56 +161,27 @@ class _OrderFoodPageState extends State<OrderFoodPage> {
       _foods = ['น้ำเป๊บซี่', 'น้ำแดง', 'น้ำสไปรท์', 'น้ำส้ม', 'น้ำเปล่า'];
     }
   }
-  // void _populateFood() async {
-  //   var dio = Dio(BaseOptions(responseType: ResponseType.plain));
-  //   var response = await dio.get('http://localhost:3000/foods');
-  //   List<dynamic> jsonData = jsonDecode(response.data);
-  //   List<String> foods = [];
-  //   for (var item in jsonData) {
-  //     foods.add(item['name']);
-  //   }
-  //   setState(() {
-  //     _foods = foods;
-  //   });
-  // }
 
-  // Future<void> _populateFood() async { // Make the method asynchronous
-  //   try {
-  //     //var response = await dio.get('http://localhost:3000/foods');
-  //     http.Response response = await http.get(Uri.parse('http://localhost:3000/foods')); // Make the HTTP GET request
-  //     if (response.statusCode == 200) {
-  //       List<dynamic> jsonData = jsonDecode(response.body); // Decode the JSON response
-  //       List<String> foods = [];
-  //       for (var item in jsonData) {
-  //         foods.add(item['name']);
-  //       }
-  //       setState(() {
-  //         _foods = foods;
-  //       });
-  //     } else {
-  //       throw Exception('Failed to load foods');
-  //     }
-  //   } catch (error) {
-  //     print('Error fetching foods: $error');
-  //   }
-  // }
-  Future<void> _populateFood() async {
-  try {
-    var dio = Dio(BaseOptions(responseType: ResponseType.plain));
-    var response = await dio.get('http://localhost:3000/foods');
-    if (response.statusCode == 200) {
-      List<String> foods = response.data.split('\n'); // Assuming each food name is on a new line
-      setState(() {
-        _foods = foods;
-      });
-    } else {
-      throw Exception('Failed to load foods');
+  Future<void> _populateFood() async { // Make the method asynchronous
+    try {
+      //var response = await dio.get('http://localhost:3000/foods');
+      http.Response response = await http.get(Uri.parse('http://localhost:3000/foods')); // Make the HTTP GET request
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = jsonDecode(response.body); // Decode the JSON response
+        List<String> foods = [];
+        for (var item in jsonData) {
+          foods.add(item['name']);
+        }
+        setState(() {
+          _foods = foods;
+        });
+      } else {
+        throw Exception('Failed to load foods');
+      }
+    } catch (error) {
+      print('Error fetching foods: $error');
     }
-  } catch (error) {
-    print('Error fetching foods: $error');
   }
-}
-
 
   @override
   void dispose() {
