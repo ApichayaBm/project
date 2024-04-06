@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http; // Import the http package
 
 void main() {
   runApp(const MyApp());
-}
+}                                                                                                                                                           
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         //primarySwatch: const Color.fromARGB(255, 171, 193, 211),
         primaryColor: const Color.fromARGB(255, 214, 165, 102),
-        hintColor: Color.fromARGB(255, 253, 205, 190),
+        hintColor: Color.fromARGB(255, 255, 255, 255),
         //scaffoldBackgroundColor: Color.fromARGB(255, 246, 247, 241),
         scaffoldBackgroundColor: Colors.yellow[50],
       ),
